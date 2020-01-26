@@ -1,0 +1,117 @@
+<span #parentElement
+      class="datepicker-wrapper">
+    <input #inputElement />
+
+    <div *ngIf="isShowing"
+         class="daterangepicker"
+         style="display: inline-block;"
+         [ngClass]="containerClasses"
+         [ngStyle]="containerStyle">
+        <div class="ranges"></div>
+
+        <div *ngFor="let side of isRangeMode ? ['left', 'right'] : ['left']"
+             class="drp-calendar"
+             [ngClass]="{
+                'left': (side == 'left'),
+                'right': (side == 'right'),
+                'single': !this.isRangeMode
+           }">
+            <div class="calendar-table">
+
+                <table class="table-condensed">
+                    <thead>
+                        <tr>
+                            <th *ngIf="this.showWeekNumbers || this.showISOWeekNumbers"></th>
+                            <th *ngIf="view[side]['showPrevBtn']"
+                                (click)="clickPrevBtn(side)"
+                                class="prev available"><span></span></th>
+                            <!-- -->
+                            <th *ngIf="!view[side]['showPrevBtn']"></th>
+                            <th *ngIf="!showDropdowns"
+                                colspan="5"
+                                class="month">{{ view[side]['dateHtml'] }}</th>
+                            <!-- -->
+                            <th *ngIf="showDropdowns"
+                                colspan="5"
+                                class="month">
+                                <select [(ngModel)]="monthYearSelects[side + '_month']"
+                                        (change)="monthOrYearSelect({event: event$, side: side, field: 'month'})"
+                                        class="monthselect">
+                                    <option *ngFor="let option of view[side]['months']"
+                                            [value]="option.value"
+                                            [attr.selected]="option.selected ? 'selected' : null"
+                                            [attr.disabled]="option.disabled ? 'disabled' : null">
+                                        {{ option.text }}
+                                    </option>
+                                </select>
+                                <select [(ngModel)]="monthYearSelects[side + '_year']"
+                                        (change)="monthOrYearSelect({event: event$, side: side, field: 'year'})"
+                                        class="yearselect">
+                                    <option *ngFor="let option of view[side]['years']"
+                                            [value]="option.value"
+                                            [attr.selected]="option.selected ? 'selected' : null"
+                                            [attr.disabled]="option.disabled ? 'disabled' : null">
+                                        {{ option.text }}
+                                    </option>
+                                </select>
+                            </th>
+                            <!-- -->
+                            <th *ngIf="!view[side]['showNextBtn']"></th>
+                            <th *ngIf="view[side]['showNextBtn']"
+                                (click)="clickNextBtn(side)"
+                                class="next available"><span></span></th>
+                            <!-- -->
+                        </tr>
+
+                        <tr *ngFor="let row of view[side]['cells']; index as i">
+                            <ng-container *ngIf="view[side]['showWeekNumbers']">
+                                <th class="week">{{ locale.weekLabel }}</th>
+                                <th *ngFor="let dayOfWeek of locale.daysOfWeek">{{ dayOfWeek }}</th>
+                            </ng-container>
+                            <td *ngFor="let cell of row; index as j"
+                                [ngClass]="cell.classes"
+                                (click)="clickDateCell({event: $event, cell: cell, side: side, row: i, col: j})"
+                                (mouseenter)="hoverDateCell({event: $event, cell: cell, side: side, row: i, col: j})">
+                                {{ cell.text }}
+                            </td>
+                        </tr>
+                    </thead>
+                </table>
+
+            </div>
+            <div class="calendar-time"></div>
+        </div>
+        <div class="drp-buttons">
+            <span class="drp-selected">{{ drpSelected }}</span>
+            <button class="cancelBtn"
+                    type="button">{{ locale.cancelLabel }}</button>
+            <button class="applyBtn"
+                    [attr.disabled]="applyBtnDisabled ? 'disabled' : null"
+                    type="button">{{ locale.applyLabel }}</button>
+        </div>
+    </div>
+
+</span>
+
+<div style="position: relative;">
+    <div #dpContainer
+         class="daterangepicker native-container">
+        <div class="ranges"></div>
+        <div class="drp-calendar left">
+            <div class="calendar-table"></div>
+            <div class="calendar-time"></div>
+        </div>
+        <div class="drp-calendar right">
+            <div class="calendar-table"></div>
+            <div class="calendar-time"></div>
+        </div>
+        <div class="drp-buttons">
+            <span class="drp-selected"></span>
+            <button class="cancelBtn"
+                    type="button"></button>
+            <button class="applyBtn"
+                    disabled="disabled"
+                    type="button"></button>
+        </div>
+    </div>
+</div>
