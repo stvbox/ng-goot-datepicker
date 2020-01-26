@@ -1,6 +1,5 @@
-# MyDp
-
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.23.
+# Дэйт пикер - ангулар компонент
+порт bootstrap-daterangepicker
 
 ## Development server
 
